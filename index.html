@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You — Good Luck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<canvas id="petals"></canvas>
+
+<main>
+
+  <!-- Hero / Envelope -->
+  <section class="hero" id="hero">
+    <p class="hero-eyebrow">a little something for</p>
+    <h1 class="hero-name" id="partnerName" contenteditable="true" spellcheck="false">You</h1>
+
+    <div class="envelope-wrap">
+      <div class="envelope" id="envelope">
+        <div class="envelope-back"></div>
+        <div class="letter" id="letterPeek">
+          <div class="letter-lines">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="envelope-flap"></div>
+        <div class="seal" id="seal">
+          <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true">
+            <path d="M20 6c2 4 6 5 10 4-1 4-5 6-6 10 4 1 7 4 8 8-4-1-8 0-11 3-1-4-4-7-8-7-4 0-7 3-8 7-1-4-5-6-8-6 3-3 4-7 3-11-4 1-8 0-11-3 4-1 7-3 8-7-4 0-8-2-11-5 4-2 8-1 11 2 0-4 2-8 6-9 1 4 3 7 7 8 1-4 3-7 7-8 0 1 0 2 0 3z" fill="currentColor"/>
+          </svg>
+        </div>
+      </div>
+      <p class="tap-hint" id="tapHint">tap the envelope</p>
+    </div>
+  </section>
+
+  <!-- Letter Reveal -->
+  <section class="letter-reveal" id="letterReveal" aria-hidden="true">
+    <div class="ribbon-divider" aria-hidden="true">
+      <svg viewBox="0 0 200 20" preserveAspectRatio="none"><path d="M0 10 Q50 0 100 10 T200 10" /></svg>
+    </div>
+
+    <article class="letter-card">
+      <p class="letter-kicker">before your big moment</p>
+      <p class="letter-body" id="letterBody">
+        Whatever today holds, you've already done the hard part &mdash; the showing up, the practicing, the caring enough to be nervous. I just want you to know that I'm in your corner, today and every day. Go be brilliant. I already know you will be.
+      </p>
+      <p class="letter-sign">with all my love, Jae <span contenteditable="true" spellcheck="false" id="signerName"></span></p>
+    </article>
+
+    <div class="affirmations">
+      <div class="affirmation">
+        <span class="affirmation-mark" aria-hidden="true">✦</span>
+        <p>You've prepared for this. Trust what you already know.</p>
+      </div>
+      <div class="affirmation">
+        <span class="affirmation-mark" aria-hidden="true">✦</span>
+        <p>Nervous just means it matters. That's a good sign.</p>
+      </div>
+      <div class="affirmation">
+        <span class="affirmation-mark" aria-hidden="true">✦</span>
+        <p>Whatever happens, I'm proud of you for trying.</p>
+      </div>
+    </div>
+
+    <div class="wish-block">
+      <button id="wishButton" class="wish-button" type="button">
+        <span>make a wish for luck</span>
+      </button>
+      <p class="wish-output" id="wishOutput" aria-live="polite"></p>
+    </div>
+
+    <footer class="site-footer">
+      <p>go get it. i'll be right here. 🩷</p>
+    </footer>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
