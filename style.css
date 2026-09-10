@@ -1,0 +1,404 @@
+/* ---------------------------------------------
+   Tokens
+--------------------------------------------- */
+:root {
+  --carnation: #ff9fc0;
+  --carnation-soft: #ffc4d9;
+  --rosewood: #6b2a3b;
+  --rosewood-deep: #4a1c27;
+  --blush: #fff4f0;
+  --blush-deep: #ffe8ea;
+  --mauve: #c9808f;
+  --gold: #d9a066;
+  --ink: #3b2229;
+
+  --display: "Fraunces", "Georgia", serif;
+  --body: "Work Sans", -apple-system, "Segoe UI", sans-serif;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% -10%, var(--blush-deep), transparent),
+    linear-gradient(180deg, var(--blush) 0%, #fff 55%, var(--blush) 100%);
+  color: var(--ink);
+  font-family: var(--body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#petals {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+main {
+  position: relative;
+  z-index: 2;
+}
+
+::selection { background: var(--carnation-soft); color: var(--rosewood-deep); }
+
+:focus-visible {
+  outline: 2px solid var(--rosewood);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------------------------------------------
+   Hero
+--------------------------------------------- */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8vh 1.5rem 6vh;
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+
+.hero.is-opened {
+  opacity: 0;
+  transform: translateY(-24px) scale(0.98);
+  pointer-events: none;
+  min-height: auto;
+  height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.hero-eyebrow {
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: var(--mauve);
+  margin: 0 0 0.4rem;
+}
+
+.hero-name {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(2.6rem, 9vw, 4.6rem);
+  color: var(--rosewood-deep);
+  margin: 0 0 3.5rem;
+  line-height: 1.05;
+  outline: none;
+  cursor: text;
+  border-bottom: 2px dotted transparent;
+  transition: border-color 0.3s;
+}
+
+.hero-name:hover,
+.hero-name:focus {
+  border-bottom-color: var(--carnation-soft);
+}
+
+.envelope-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+/* Envelope, built from CSS shapes */
+.envelope {
+  position: relative;
+  width: min(78vw, 320px);
+  height: min(56vw, 220px);
+  cursor: pointer;
+  perspective: 1000px;
+}
+
+.envelope-back {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, var(--carnation), var(--carnation-soft));
+  border-radius: 10px;
+  box-shadow: 0 18px 40px -18px rgba(107, 42, 59, 0.45);
+}
+
+.letter {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: -6%;
+  height: 78%;
+  background: #fffaf6;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(107, 42, 59, 0.15);
+  transition: transform 1.1s var(--ease);
+  z-index: 1;
+  padding: 1.4rem 1.2rem;
+  display: flex;
+  align-items: flex-start;
+}
+
+.letter-lines {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.letter-lines span {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--blush-deep);
+}
+.letter-lines span:nth-child(1) { width: 90%; }
+.letter-lines span:nth-child(2) { width: 75%; }
+.letter-lines span:nth-child(3) { width: 82%; }
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 58%;
+  background: linear-gradient(200deg, var(--carnation-soft), var(--carnation));
+  clip-path: polygon(0 0, 100% 0, 50% 88%);
+  transform-origin: top center;
+  border-radius: 10px 10px 0 0;
+  transition: transform 0.9s var(--ease), filter 0.9s var(--ease);
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(107, 42, 59, 0.12);
+}
+
+.seal {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  background: var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff4e4;
+  z-index: 3;
+  box-shadow: 0 4px 10px rgba(107, 42, 59, 0.35), inset 0 -3px 6px rgba(0,0,0,0.15);
+  transition: transform 0.6s var(--ease), opacity 0.6s var(--ease);
+}
+
+.envelope:hover .seal { transform: translate(-50%, -50%) scale(1.06); }
+
+.envelope.is-open .envelope-flap {
+  transform: rotateX(180deg);
+  filter: brightness(0.94);
+}
+
+.envelope.is-open .seal {
+  opacity: 0;
+  transform: translate(-50%, -140%) scale(0.5) rotate(25deg);
+}
+
+.envelope.is-open .letter {
+  transform: translateY(-64%) scale(1.04);
+}
+
+.tap-hint {
+  font-size: 0.85rem;
+  color: var(--mauve);
+  letter-spacing: 0.02em;
+  margin: 0;
+  animation: pulse 2.6s ease-in-out infinite;
+}
+
+.envelope.is-open ~ .tap-hint,
+.is-open + .tap-hint {
+  opacity: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+/* ---------------------------------------------
+   Letter reveal section
+--------------------------------------------- */
+.letter-reveal {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 4vh 1.5rem 10vh;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s var(--ease) 0.2s, transform 1s var(--ease) 0.2s;
+}
+
+.letter-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ribbon-divider {
+  width: 120px;
+  margin: 0 auto 2.5rem;
+  color: var(--carnation);
+}
+.ribbon-divider svg {
+  width: 100%;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.letter-card {
+  background: #fffaf7;
+  border: 1px solid var(--blush-deep);
+  border-radius: 18px;
+  padding: clamp(1.8rem, 5vw, 3rem);
+  box-shadow: 0 30px 60px -35px rgba(107, 42, 59, 0.35);
+  text-align: center;
+}
+
+.letter-kicker {
+  font-size: 0.85rem;
+  color: var(--mauve);
+  margin: 0 0 1.1rem;
+}
+
+.letter-body {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.2rem, 3.4vw, 1.55rem);
+  line-height: 1.55;
+  color: var(--rosewood-deep);
+  max-width: 46ch;
+  margin: 0 auto 1.6rem;
+}
+
+.letter-sign {
+  font-family: var(--body);
+  font-size: 0.95rem;
+  color: var(--mauve);
+  margin: 0;
+}
+
+.letter-sign span {
+  color: var(--rosewood);
+  font-weight: 500;
+  border-bottom: 1px dotted var(--carnation-soft);
+  cursor: text;
+}
+
+/* Affirmations */
+.affirmations {
+  margin: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.affirmation {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  text-align: left;
+}
+
+.affirmation-mark {
+  color: var(--carnation);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  flex-shrink: 0;
+}
+
+.affirmation p {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* Wish button */
+.wish-block {
+  text-align: center;
+  margin: 3.5rem 0 3rem;
+}
+
+.wish-button {
+  position: relative;
+  font-family: var(--body);
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff8f4;
+  background: linear-gradient(135deg, var(--carnation), var(--mauve));
+  border: none;
+  padding: 0.95rem 2.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 14px 30px -14px rgba(107, 42, 59, 0.5);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  overflow: visible;
+}
+
+.wish-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px -14px rgba(107, 42, 59, 0.6);
+}
+
+.wish-button:active {
+  transform: translateY(0px) scale(0.97);
+}
+
+.wish-output {
+  margin: 1.4rem 0 0;
+  min-height: 1.6em;
+  font-family: var(--display);
+  font-style: italic;
+  color: var(--rosewood);
+  font-size: 1.1rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+
+.wish-output.is-shown {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.site-footer {
+  text-align: center;
+  color: var(--mauve);
+  font-size: 0.95rem;
+  margin-top: 2rem;
+}
+
+/* ---------------------------------------------
+   Responsive
+--------------------------------------------- */
+@media (max-width: 420px) {
+  .hero-name { margin-bottom: 2.6rem; }
+  .letter-card { border-radius: 14px; }
+}
