@@ -172,7 +172,9 @@
 
   envelope.addEventListener("click", openEnvelope);
   envelope.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
+    // support multiple representations of the "space" key across browsers
+    const isActivateKey = e.key === "Enter" || e.key === " " || e.key === "Spacebar" || e.code === "Space";
+    if (isActivateKey) {
       e.preventDefault();
       openEnvelope();
     }
