@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You — Good Luck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ---------------------------------------------
+   Tokens
+--------------------------------------------- */
+:root {
+  --carnation: #ff9fc0;
+  --carnation-soft: #ffc4d9;
+  --rosewood: #6b2a3b;
+  --rosewood-deep: #4a1c27;
+  --blush: #fff4f0;
+  --blush-deep: #ffe8ea;
+  --mauve: #c9808f;
+  --gold: #d9a066;
+  --ink: #3b2229;
+
+  --display: "Fraunces", "Georgia", serif;
+  --body: "Work Sans", -apple-system, "Segoe UI", sans-serif;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% -10%, var(--blush-deep), transparent),
+    linear-gradient(180deg, var(--blush) 0%, #fff 55%, var(--blush) 100%);
+  color: var(--ink);
+  font-family: var(--body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#petals {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+main {
+  position: relative;
+  z-index: 2;
+}
+
+::selection { background: var(--carnation-soft); color: var(--rosewood-deep); }
+
+:focus-visible {
+  outline: 2px solid var(--rosewood);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------------------------------------------
+   Hero
+--------------------------------------------- */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8vh 1.5rem 6vh;
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+
+.hero.is-opened {
+  opacity: 0;
+  transform: translateY(-24px) scale(0.98);
+  pointer-events: none;
+  min-height: auto;
+  height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.hero-eyebrow {
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: var(--mauve);
+  margin: 0 0 0.4rem;
+}
+
+.hero-name {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(2.6rem, 9vw, 4.6rem);
+  color: var(--rosewood-deep);
+  margin: 0 0 3.5rem;
+  line-height: 1.05;
+  outline: none;
+  cursor: text;
+  border-bottom: 2px dotted transparent;
+  transition: border-color 0.3s;
+}
+
+.hero-name:hover,
+.hero-name:focus {
+  border-bottom-color: var(--carnation-soft);
+}
+
+.envelope-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+/* Envelope, built from CSS shapes */
+.envelope {
+  position: relative;
+  width: min(78vw, 320px);
+  height: min(56vw, 220px);
+  cursor: pointer;
+  perspective: 1000px;
+}
+
+.envelope-back {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, var(--carnation), var(--carnation-soft));
+  border-radius: 10px;
+  box-shadow: 0 18px 40px -18px rgba(107, 42, 59, 0.45);
+}
+
+.letter {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: -6%;
+  height: 78%;
+  background: #fffaf6;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(107, 42, 59, 0.15);
+  transition: transform 1.1s var(--ease);
+  z-index: 1;
+  padding: 1.4rem 1.2rem;
+  display: flex;
+  align-items: flex-start;
+}
+
+.letter-lines {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.letter-lines span {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--blush-deep);
+}
+.letter-lines span:nth-child(1) { width: 90%; }
+.letter-lines span:nth-child(2) { width: 75%; }
+.letter-lines span:nth-child(3) { width: 82%; }
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 58%;
+  background: linear-gradient(200deg, var(--carnation-soft), var(--carnation));
+  clip-path: polygon(0 0, 100% 0, 50% 88%);
+  transform-origin: top center;
+  border-radius: 10px 10px 0 0;
+  transition: transform 0.9s var(--ease), filter 0.9s var(--ease);
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(107, 42, 59, 0.12);
+}
+
+.seal {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  background: var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff4e4;
+  z-index: 3;
+  box-shadow: 0 4px 10px rgba(107, 42, 59, 0.35), inset 0 -3px 6px rgba(0,0,0,0.15);
+  transition: transform 0.6s var(--ease), opacity 0.6s var(--ease);
+}
+
+.envelope:hover .seal { transform: translate(-50%, -50%) scale(1.06); }
+
+.envelope.is-open .envelope-flap {
+  transform: rotateX(180deg);
+  filter: brightness(0.94);
+}
+
+.envelope.is-open .seal {
+  opacity: 0;
+  transform: translate(-50%, -140%) scale(0.5) rotate(25deg);
+}
+
+.envelope.is-open .letter {
+  transform: translateY(-64%) scale(1.04);
+}
+
+.tap-hint {
+  font-size: 0.85rem;
+  color: var(--mauve);
+  letter-spacing: 0.02em;
+  margin: 0;
+  animation: pulse 2.6s ease-in-out infinite;
+}
+
+.envelope.is-open ~ .tap-hint,
+.is-open + .tap-hint {
+  opacity: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+/* ---------------------------------------------
+   Letter reveal section
+--------------------------------------------- */
+.letter-reveal {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 4vh 1.5rem 10vh;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s var(--ease) 0.2s, transform 1s var(--ease) 0.2s;
+}
+
+.letter-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ribbon-divider {
+  width: 120px;
+  margin: 0 auto 2.5rem;
+  color: var(--carnation);
+}
+.ribbon-divider svg {
+  width: 100%;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.letter-card {
+  background: #fffaf7;
+  border: 1px solid var(--blush-deep);
+  border-radius: 18px;
+  padding: clamp(1.8rem, 5vw, 3rem);
+  box-shadow: 0 30px 60px -35px rgba(107, 42, 59, 0.35);
+  text-align: center;
+}
+
+.letter-kicker {
+  font-size: 0.85rem;
+  color: var(--mauve);
+  margin: 0 0 1.1rem;
+}
+
+.letter-body {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.2rem, 3.4vw, 1.55rem);
+  line-height: 1.55;
+  color: var(--rosewood-deep);
+  max-width: 46ch;
+  margin: 0 auto 1.6rem;
+}
+
+.letter-sign {
+  font-family: var(--body);
+  font-size: 0.95rem;
+  color: var(--mauve);
+  margin: 0;
+}
+
+.letter-sign span {
+  color: var(--rosewood);
+  font-weight: 500;
+  border-bottom: 1px dotted var(--carnation-soft);
+  cursor: text;
+}
+
+/* Affirmations */
+.affirmations {
+  margin: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.affirmation {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  text-align: left;
+}
+
+.affirmation-mark {
+  color: var(--carnation);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  flex-shrink: 0;
+}
+
+.affirmation p {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* Wish button */
+.wish-block {
+  text-align: center;
+  margin: 3.5rem 0 3rem;
+}
+
+.wish-button {
+  position: relative;
+  font-family: var(--body);
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff8f4;
+  background: linear-gradient(135deg, var(--carnation), var(--mauve));
+  border: none;
+  padding: 0.95rem 2.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 14px 30px -14px rgba(107, 42, 59, 0.5);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  overflow: visible;
+}
+
+.wish-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px -14px rgba(107, 42, 59, 0.6);
+}
+
+.wish-button:active {
+  transform: translateY(0px) scale(0.97);
+}
+
+.wish-output {
+  margin: 1.4rem 0 0;
+  min-height: 1.6em;
+  font-family: var(--display);
+  font-style: italic;
+  color: var(--rosewood);
+  font-size: 1.1rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+
+.wish-output.is-shown {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.site-footer {
+  text-align: center;
+  color: var(--mauve);
+  font-size: 0.95rem;
+  margin-top: 2rem;
+}
+
+/* ---------------------------------------------
+   Responsive
+--------------------------------------------- */
+@media (max-width: 420px) {
+  .hero-name { margin-bottom: 2.6rem; }
+  .letter-card { border-radius: 14px; }
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="petals"></canvas>
+
+<main>
+
+  <!-- Hero / Envelope -->
+  <section class="hero" id="hero">
+    <p class="hero-eyebrow">a little something for</p>
+    <h1 class="hero-name" id="partnerName" contenteditable="true" spellcheck="false">You</h1>
+
+    <div class="envelope-wrap">
+      <div class="envelope" id="envelope">
+        <div class="envelope-back"></div>
+        <div class="letter" id="letterPeek">
+          <div class="letter-lines">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="envelope-flap"></div>
+        <div class="seal" id="seal">
+          <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true">
+            <path d="M20 6c2 4 6 5 10 4-1 4-5 6-6 10 4 1 7 4 8 8-4-1-8 0-11 3-1-4-4-7-8-7-4 0-7 3-8 7-1-4-5-6-8-6 3-3 4-7 3-11-4 1-8 0-11-3 4-1 7-3 8-7-4 0-8-2-11-5 4-2 8-1 11 2 0-4 2-8 6-9 1 4 3 7 7 8 1-4 3-7 7-8 0 1 0 2 0 3z" fill="currentColor"/>
+          </svg>
+        </div>
+      </div>
+      <p class="tap-hint" id="tapHint">tap the envelope</p>
+    </div>
+  </section>
+
+  <!-- Letter Reveal -->
+  <section class="letter-reveal" id="letterReveal" aria-hidden="true">
+    <div class="ribbon-divider" aria-hidden="true">
+      <svg viewBox="0 0 200 20" preserveAspectRatio="none"><path d="M0 10 Q50 0 100 10 T200 10" /></svg>
+    </div>
+
+    <article class="letter-card">
+      <p class="letter-kicker">before your big moment</p>
+      <p class="letter-body" id="letterBody">
+        Whatever today holds, you've already done the hard part &mdash; the showing up, the practicing, the caring enough to be nervous. I just want you to know that I'm in your corner, today and every day. Go be brilliant. I already know you will be.
+      </p>
+      <p class="letter-sign">with all my love, <span contenteditable="true" spellcheck="false" id="signerName">Me</span></p>
+    </article>
+
+    <div class="affirmations">
+      <div class="affirmation">
+        <span class="affirmation-mark" aria-hidden="true">✦</span>
+        <p>You've prepared for this. Trust what you already know.</p>
+      </div>
+      <div class="affirmation">
+        <span class="affirmation-mark" aria-hidden="true">✦</span>
+        <p>Nervous just means it matters. That's a good sign.</p>
+      </div>
+      <div class="affirmation">
+        <span class="affirmation-mark" aria-hidden="true">✦</span>
+        <p>Whatever happens, I'm proud of you for trying.</p>
+      </div>
+    </div>
+
+    <div class="wish-block">
+      <button id="wishButton" class="wish-button" type="button">
+        <span>make a wish for luck</span>
+      </button>
+      <p class="wish-output" id="wishOutput" aria-live="polite"></p>
+    </div>
+
+    <footer class="site-footer">
+      <p>go get it. i'll be right here. 🩷</p>
+    </footer>
+  </section>
+
+</main>
+
+<script>
+(() => {
+  "use strict";
+
+  /* =========================================================
+     Ambient falling petals (canvas)
+  ========================================================= */
+  const canvas = document.getElementById("petals");
+  const ctx = canvas.getContext("2d");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let width, height, petals, dpr;
+
+  const PETAL_COLORS = ["#ff9fc0", "#ffc4d9", "#c9808f", "#ffe8ea"];
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function makePetal(randomY) {
+    const size = 6 + Math.random() * 8;
+    return {
+      x: Math.random() * width,
+      y: randomY ? Math.random() * height : -20 - Math.random() * height * 0.3,
+      size,
+      speedY: 0.4 + Math.random() * 0.7,
+      driftAmp: 20 + Math.random() * 30,
+      driftFreq: 0.004 + Math.random() * 0.006,
+      driftPhase: Math.random() * Math.PI * 2,
+      rotation: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.02,
+      color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
+      opacity: 0.5 + Math.random() * 0.4,
+    };
+  }
+
+  function initPetals() {
+    const count = window.innerWidth < 600 ? 14 : 24;
+    petals = Array.from({ length: count }, () => makePetal(true));
+  }
+
+  function drawPetal(p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation);
+    ctx.globalAlpha = p.opacity;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    // simple petal / leaf shape via two curves
+    ctx.moveTo(0, -p.size);
+    ctx.bezierCurveTo(p.size * 0.8, -p.size * 0.4, p.size * 0.8, p.size * 0.4, 0, p.size);
+    ctx.bezierCurveTo(-p.size * 0.8, p.size * 0.4, -p.size * 0.8, -p.size * 0.4, 0, -p.size);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  let t = 0;
+  function tick() {
+    ctx.clearRect(0, 0, width, height);
+    t += 1;
+    for (const p of petals) {
+      p.y += p.speedY;
+      p.x += Math.sin(t * p.driftFreq + p.driftPhase) * 0.6;
+      p.rotation += p.rotSpeed;
+      if (p.y > height + 20) {
+        Object.assign(p, makePetal(false));
+      }
+      drawPetal(p);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  resize();
+  initPetals();
+  window.addEventListener("resize", () => {
+    resize();
+    initPetals();
+  });
+
+  if (!reduceMotion) {
+    requestAnimationFrame(tick);
+  } else {
+    // draw a single static frame so the page doesn't feel empty
+    ctx.clearRect(0, 0, width, height);
+    petals.forEach(drawPetal);
+  }
+
+  /* =========================================================
+     Petal burst (used on wish button click)
+  ========================================================= */
+  function burst(x, y) {
+    const burstPetals = Array.from({ length: 18 }, () => {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 2 + Math.random() * 3.5;
+      return {
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 1.5,
+        size: 4 + Math.random() * 6,
+        rotation: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.3,
+        color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
+        life: 0,
+        maxLife: 60 + Math.random() * 30,
+      };
+    });
+
+    function burstTick() {
+      ctx.save();
+      for (let i = burstPetals.length - 1; i >= 0; i--) {
+        const p = burstPetals[i];
+        p.life++;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.06; // gravity
+        p.vx *= 0.99;
+        p.rotation += p.rotSpeed;
+        const fade = 1 - p.life / p.maxLife;
+        if (fade <= 0) {
+          burstPetals.splice(i, 1);
+          continue;
+        }
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
+        ctx.globalAlpha = Math.max(fade, 0);
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.moveTo(0, -p.size);
+        ctx.bezierCurveTo(p.size * 0.8, -p.size * 0.4, p.size * 0.8, p.size * 0.4, 0, p.size);
+        ctx.bezierCurveTo(-p.size * 0.8, p.size * 0.4, -p.size * 0.8, -p.size * 0.4, 0, -p.size);
+        ctx.fill();
+        ctx.restore();
+      }
+      ctx.restore();
+      if (burstPetals.length > 0) requestAnimationFrame(burstTick);
+    }
+    if (!reduceMotion) requestAnimationFrame(burstTick);
+  }
+
+  /* =========================================================
+     Envelope open interaction
+  ========================================================= */
+  const envelope = document.getElementById("envelope");
+  const hero = document.getElementById("hero");
+  const tapHint = document.getElementById("tapHint");
+  const letterReveal = document.getElementById("letterReveal");
+
+  let opened = false;
+
+  function openEnvelope() {
+    if (opened) return;
+    opened = true;
+    envelope.classList.add("is-open");
+    tapHint.style.opacity = "0";
+
+    setTimeout(() => {
+      hero.classList.add("is-opened");
+      letterReveal.classList.add("is-visible");
+      letterReveal.setAttribute("aria-hidden", "false");
+      setTimeout(() => {
+        letterReveal.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+      }, 150);
+    }, 900);
+  }
+
+  envelope.addEventListener("click", openEnvelope);
+  envelope.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      openEnvelope();
+    }
+  });
+  envelope.setAttribute("tabindex", "0");
+  envelope.setAttribute("role", "button");
+  envelope.setAttribute("aria-label", "Open the envelope to reveal your letter");
+
+  /* =========================================================
+     Wish button
+  ========================================================= */
+  const wishes = [
+    "may every nerve turn into focus",
+    "may the room feel a little kinder today",
+    "may your hard work finally get to show off",
+    "may you surprise yourself",
+    "may today go easier than you think",
+    "sending every bit of luck I have",
+  ];
+
+  const wishButton = document.getElementById("wishButton");
+  const wishOutput = document.getElementById("wishOutput");
+  let wishIndex = -1;
+
+  wishButton.addEventListener("click", (e) => {
+    const rect = wishButton.getBoundingClientRect();
+    burst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+
+    wishIndex = (wishIndex + 1) % wishes.length;
+    wishOutput.classList.remove("is-shown");
+
+    window.setTimeout(() => {
+      wishOutput.textContent = "\u201C" + wishes[wishIndex] + "\u201D";
+      wishOutput.classList.add("is-shown");
+    }, 180);
+  });
+
+  /* =========================================================
+     Editable name fields: keep them tidy on blur
+  ========================================================= */
+  document.querySelectorAll("[contenteditable]").forEach((el) => {
+    el.addEventListener("blur", () => {
+      const text = el.textContent.trim();
+      el.textContent = text.length ? text : el.dataset.placeholder || "You";
+    });
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        el.blur();
+      }
+    });
+  });
+})();
+
+</script>
+</body>
+</html>
